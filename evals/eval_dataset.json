@@ -1,0 +1,159 @@
+{
+  "cases": [
+    {
+      "id": "docs-01",
+      "question": "What happens if a former customer says no during a win-back campaign?",
+      "expected_route": "docs",
+      "expected_answer_contains": ["closes", "6 months"],
+      "expected_source": "winback_procedure.pdf",
+      "notes": "winback_procedure.pdf section 4"
+    },
+    {
+      "id": "docs-02",
+      "question": "Which customers are required to receive a 30-day wellness call?",
+      "expected_route": "docs",
+      "expected_answer_contains": ["month-to-month", "setup-check"],
+      "expected_source": "customer_onboarding_guide.pdf",
+      "notes": "onboarding guide section 4"
+    },
+    {
+      "id": "docs-03",
+      "question": "What should retention specialists do before discussing retention offers?",
+      "expected_route": "docs",
+      "expected_answer_contains": ["resolve", "underlying issue"],
+      "expected_source": "escalation_procedure.pdf",
+      "notes": "escalation procedure section 6"
+    },
+    {
+      "id": "docs-04",
+      "question": "Can a retention discount be applied to equipment rental fees?",
+      "expected_route": "docs",
+      "expected_answer_contains": ["no", "equipment rental"],
+      "expected_source": "retention_discount_policy.pdf",
+      "notes": "retention policy section 5, prohibited practices"
+    },
+    {
+      "id": "docs-05-trap",
+      "question": "Can I offer a retention discount to a customer whose service was disconnected 45 days ago?",
+      "expected_route": "docs",
+      "expected_answer_contains": ["win-back", "20"],
+      "expected_answer_not_contains": ["yes, you can offer a retention discount"],
+      "expected_source": "winback_procedure.pdf",
+      "notes": "TRAP: retention discounts excluded >30 days post-disconnect; correct answer redirects to win-back procedure (RET-POL-019). Cross-reference retrieval test."
+    },
+    {
+      "id": "docs-06-trap",
+      "question": "A new customer is disputing their first bill. Do the retention discount authorization limits apply to the fee waiver I can offer them?",
+      "expected_route": "docs",
+      "expected_answer_contains": ["not", "25"],
+      "expected_source": "customer_onboarding_guide.pdf",
+      "notes": "TRAP: EUR 25 first-bill waiver is an onboarding remedy, explicitly NOT subject to RET-POL-021. Tests rule-blending."
+    },
+    {
+      "id": "sql-01",
+      "question": "How many customers have churned in total?",
+      "expected_route": "sql",
+      "expected_answer_contains": ["1869"],
+      "notes": "Ground truth: SELECT COUNT(*) FROM telco.customers WHERE churn = 'Yes';"
+    },
+    {
+      "id": "sql-02",
+      "question": "How many month-to-month contract customers churned?",
+      "expected_route": "sql",
+      "expected_answer_contains": ["1655"],
+      "notes": "Ground truth: SELECT COUNT(*) FROM telco.customers WHERE churn = 'Yes' AND contract = 'Month-to-month';"
+    },
+    {
+      "id": "sql-03",
+      "question": "What is the average monthly charge for customers with fiber optic internet?",
+      "expected_route": "sql",
+      "expected_answer_contains": ["91.50"],
+      "notes": "Ground truth: SELECT ROUND(AVG(monthly_charges)::numeric, 2) FROM telco.customers WHERE internet_service = 'Fiber optic';"
+    },
+    {
+      "id": "sql-04",
+      "question": "What is the average tenure of churned customers compared to retained customers?",
+      "expected_route": "sql",
+      "expected_answer_contains": ["18.0", "37.6"],
+      "notes": "Ground truth: SELECT churn, ROUND(AVG(tenure)::numeric, 1) FROM telco.customers GROUP BY churn;"
+    },
+    {
+      "id": "sql-05",
+      "question": "How many senior citizens are in the customer base?",
+      "expected_route": "sql",
+      "expected_answer_contains": ["1142"],
+      "notes": "Ground truth: SELECT COUNT(*) FROM telco.customers WHERE senior_citizen = 1;"
+    },
+    {
+      "id": "sql-06",
+      "question": "How many customers have been with us for more than 60 months?",
+      "expected_route": "sql",
+      "expected_answer_contains": ["1407"],
+      "notes": "Ground truth: SELECT COUNT(*) FROM telco.customers WHERE tenure > 60;"
+    },
+    {
+      "id": "oos-01",
+      "question": "What's the weather like today?",
+      "expected_route": "out_of_scope",
+      "expected_answer_contains": [],
+      "notes": "Clearly unrelated"
+    },
+    {
+      "id": "oos-02",
+      "question": "Write me a poem about customer churn",
+      "expected_route": "out_of_scope",
+      "expected_answer_contains": [],
+      "notes": "Creative request, on-topic vocabulary — harder than oos-01"
+    },
+    {
+      "id": "oos-03",
+      "question": "What's the best restaurant near the office?",
+      "expected_route": "out_of_scope",
+      "expected_answer_contains": [],
+      "notes": "Workplace-adjacent but out of scope"
+    },
+    {
+      "id": "clarify-01",
+      "question": "Tell me about the account",
+      "expected_route": "clarify",
+      "expected_answer_contains": [],
+      "notes": "From Saturday's router-overconfidence bug — regression test"
+    },
+    {
+      "id": "clarify-02",
+      "question": "What percentage discount can I offer to an at-risk customer?",
+      "expected_route": "clarify",
+      "expected_answer_contains": [],
+      "notes": "Unanswerable without tenure + contract type. Naive RAG will confidently pick a number from the tier table. Alternative acceptable behavior: docs route that asks for tenure/contract."
+    },
+    {
+      "id": "notindocs-01",
+      "question": "What are the discount rules for business accounts?",
+      "expected_route": "docs",
+      "expected_answer_contains": ["don't have that information"],
+      "notes": "DEVIOUS: retrieval WILL find the scope chunk mentioning business accounts (RET-POL-014, which doesn't exist). Tests refusal on related-but-insufficient context. R4 proof."
+    },
+    {
+      "id": "notindocs-02",
+      "question": "What is the policy on refunding equipment fees for deceased customers?",
+      "expected_route": "docs",
+      "expected_answer_contains": ["don't have that information"],
+      "notes": "Plausible policy question, genuinely absent. R4 proof."
+    },
+    {
+      "id": "notindocs-03",
+      "question": "How much annual leave do retention agents get?",
+      "expected_route": "docs",
+      "expected_answer_contains": ["don't have that information"],
+      "notes": "HR question — docs mention HR-POL-007 but contain no HR content. Related-but-absent. R4 proof."
+    },
+    {
+      "id": "docs-07",
+      "question": "Who owns policy document RET-POL-021?",
+      "expected_route": "docs",
+      "expected_answer_contains": ["Customer Retention Operations"],
+      "expected_source": "retention_discount_policy.pdf",
+      "notes": "Metadata retrieval test — owner appears in the document header line"
+    }
+  ]
+}
