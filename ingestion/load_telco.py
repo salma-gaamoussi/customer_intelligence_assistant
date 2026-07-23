@@ -17,7 +17,7 @@ from sqlalchemy import create_engine
 
 load_dotenv()
 
-DEFAULT_CSV_PATH = Path("data\Telco_Customer_Churn.csv")
+DEFAULT_CSV_PATH = Path("data/Telco_Customer_Churn.csv")
 TABLE_NAME = "customers"
 SCHEMA_NAME = "telco"
 
