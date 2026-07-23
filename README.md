@@ -71,6 +71,24 @@ curl -X POST http://localhost:8000/ask \
 You get the answer, the route taken, confidence, cited sources (`docs`) or executed
 queries (`sql`), and latency.
 
+## Who'd actually use this
+
+Picture an agent mid-call with a customer threatening to cancel. They ask "how
+much discount can I offer a customer with 18 months tenure on a 2-year contract
+without supervisor approval?" instead of digging through four policy PDFs while
+the customer's on hold. They get the tier back with `[retention_discount_policy.pdf]`
+cited, so they can point to it if the customer pushes back.
+
+A team lead doesn't need to touch this any differently to get value out of it —
+they'd ask something like "how many customers on month-to-month contracts have no
+tech support and churned this quarter?" and get a number straight from the `sql`
+route, instead of filing a request with a data analyst for something this small.
+
+QA reviewing that same call later can ask the exact discount question the agent
+faced, and check the cited policy against what was actually offered — the citation
+doubles as the paper trail for "did this call follow policy," not just an answer
+for whoever asked it live.
+
 ## Evaluation
 
 ```
