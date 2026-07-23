@@ -79,9 +79,9 @@ A few examples of who this is for and what they'd type in:
   months tenure on a 2-year contract without approval?" Beats hunting through
   the policy PDF while the customer's waiting, and the answer comes with the
   source file cited, so they've got something to point to if it's questioned.
-- **A team lead** — "how many month-to-month customers with no tech support
-  churned this quarter?" Goes straight to the `sql` route and gets a number
-  back, no need to ping a data analyst for something this small.
+- **A retention manager** — "how many month-to-month customers with no tech
+  support churned this quarter?" Goes straight to the `sql` route and gets a
+  number back, no need to ping a data analyst for something this small.
 - **QA, after the fact** — asks the exact discount question the agent had to
   answer live, and checks the cited policy against what was actually offered.
   Same question, just used to verify instead of decide.
