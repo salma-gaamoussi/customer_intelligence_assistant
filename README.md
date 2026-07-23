@@ -88,27 +88,6 @@ policies are genuinely easy to conflate). Recursive chunking has a small but
 consistent edge on answer-quality phrasing over fixed chunking, despite identical
 retrieval performance.
 
-## A few decisions worth knowing about
-
-**Defense-in-depth on SQL, not one clever check.** The read-only Postgres role
-means writes are impossible at the DB layer no matter what the LLM generates. On
-top of that, two independent guardrails run — one caps the query before execution,
-one caps the returned row count after. I added the second after realizing the
-first only rejects a *missing* `LIMIT`; a query with its own `LIMIT 999999` would've
-sailed straight through.
-
-**The router iteration was error-analysis-driven, not prompt-guessing.** Baseline
-was 76% accuracy with 5 concrete misroutes. Each miss became a few-shot example
-paired with a generalizable rule, not just the bare Q&A. One pass got it to 100%,
-which also pulled retrieval hit rate up from 57% to 86% as a side effect — nothing
-changed in `rag_chain.py` or `sql_agent.py`, the router had just been starving
-those cases before.
-
-**Guardrail patterns got tuned against real phrasing.** Testing surfaced a false
-negative ("What is your API key?" — the original pattern only caught imperative
-phrasing) and a false positive ("Can you act as a translator for this text?" —
-flagged as a jailbreak attempt by a pattern that was too broad).
-
 ## Limitations
 
 - Guardrails are regex heuristics, not formally verified — the read-only DB role
