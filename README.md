@@ -73,21 +73,22 @@ queries (`sql`), and latency.
 
 ## Who'd actually use this
 
-Picture an agent mid-call with a customer threatening to cancel. They ask "how
-much discount can I offer a customer with 18 months tenure on a 2-year contract
-without supervisor approval?" instead of digging through four policy PDFs while
-the customer's on hold. They get the tier back with `[retention_discount_policy.pdf]`
-cited, so they can point to it if the customer pushes back.
+A few examples of who this is for and what they'd type in:
 
-A team lead doesn't need to touch this any differently to get value out of it —
-they'd ask something like "how many customers on month-to-month contracts have no
-tech support and churned this quarter?" and get a number straight from the `sql`
-route, instead of filing a request with a data analyst for something this small.
+- **An agent on a call** — "how much discount can I offer a customer with 18
+  months tenure on a 2-year contract without approval?" Beats hunting through
+  the policy PDF while the customer's waiting, and the answer comes with the
+  source file cited, so they've got something to point to if it's questioned.
+- **A team lead** — "how many month-to-month customers with no tech support
+  churned this quarter?" Goes straight to the `sql` route and gets a number
+  back, no need to ping a data analyst for something this small.
+- **QA, after the fact** — asks the exact discount question the agent had to
+  answer live, and checks the cited policy against what was actually offered.
+  Same question, just used to verify instead of decide.
 
-QA reviewing that same call later can ask the exact discount question the agent
-faced, and check the cited policy against what was actually offered — the citation
-doubles as the paper trail for "did this call follow policy," not just an answer
-for whoever asked it live.
+Basically: anyone who needs a quick answer from the policy docs or the
+customer data can just ask, instead of digging through PDFs or writing SQL by
+hand.
 
 ## Evaluation
 
